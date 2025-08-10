@@ -1,0 +1,28 @@
+---
+title: React Native — Testing
+description: Jest + React Native Testing Library with Expo Router considerations.
+globs:
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "app/**"
+  - "components/**"
+  - "hooks/**"
+priority: 70
+---
+
+## Frameworks
+- Use Jest and `@testing-library/react-native`.
+- Mock Expo Router with lightweight stubs for `useRouter`, `Link`, and `useLocalSearchParams` when necessary.
+
+## What to test
+- Hooks: state transitions, side-effect boundaries, edge cases.
+- Components: interactions via accessibility roles/testIDs; ensure a11y attributes exist.
+- Routes: happy paths for search params and screen composition.
+
+## Avoid
+- Snapshot-only tests for dynamic UIs.
+- Testing library internals.
+
+## CI
+- Include `typecheck`, `lint`, and unit tests. Keep tests deterministic (no real network).
+

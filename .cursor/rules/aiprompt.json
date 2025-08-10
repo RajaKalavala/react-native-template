@@ -1,0 +1,14 @@
+{
+  "name": "React Native (Expo Router)",
+  "slug": "react-native-expo-router",
+  "version": "1.1.0",
+  "description": "Rules tuned to an Expo + Expo Router React Native project with /app routes, components/ui, hooks, and constants.",
+  "tags": ["cursor", "rules", "react-native", "expo", "expo-router", "typescript", "mobile"],
+  "files": [
+    "core.mdc",
+    "architecture.mdc",
+    "performance.mdc",
+    "testing.mdc",
+    "apis-and-permissions.mdc"
+  ]
+}

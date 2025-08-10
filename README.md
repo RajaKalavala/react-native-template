@@ -1,50 +1,264 @@
-# Welcome to your Expo app 👋
+# React Native Template with Expo Router
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A production-ready React Native template built with Expo Router, following best practices for architecture, performance, and developer experience.
 
-## Get started
+## 🚀 Features
 
-1. Install dependencies
+- **Expo Router**: File-based routing with TypeScript support
+- **React Query**: Server state management with caching and synchronization
+- **Zustand**: Lightweight client state management with persistence
+- **TypeScript**: Strict type checking throughout the application
+- **Testing**: Jest + React Native Testing Library setup
+- **Performance**: Optimized for lists, images, and re-renders
+- **Accessibility**: Built-in accessibility support
+- **Error Handling**: Centralized error management
+- **API Layer**: Type-safe HTTP client with Zod validation
 
-   ```bash
-   npm install
-   ```
+## 📁 Project Structure
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+react-native-template/
+├── app/                    # Expo Router routes
+│   ├── (tabs)/            # Tab navigation
+│   ├── _layout.tsx        # Root layout
+│   └── +not-found.tsx     # 404 page
+├── components/            # Shared UI components
+│   ├── ui/               # Primitive/reusable components
+│   └── ...               # Composite components
+├── hooks/                # Custom hooks (use*.ts)
+├── lib/                  # Core utilities
+│   ├── api.ts           # HTTP client
+│   ├── queryKeys.ts     # React Query keys
+│   ├── queryClient.ts   # React Query configuration
+│   └── store.ts         # Zustand store
+├── constants/           # App-wide constants
+├── assets/             # Static assets
+└── scripts/            # Build scripts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🛠️ Setup Instructions
 
-## Learn more
+### Prerequisites
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js 18+
+- npm or yarn
+- Expo CLI (`npm install -g @expo/cli`)
+- iOS Simulator (for iOS development)
+- Android Studio (for Android development)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 1. Install Dependencies
 
-## Join the community
+```bash
+npm install
+```
 
-Join our community of developers creating universal apps.
+### 2. Environment Setup
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Create a `.env` file in the root directory:
+
+```env
+EXPO_PUBLIC_API_URL=https://your-api-url.com
+```
+
+### 3. Start Development Server
+
+```bash
+# Start Expo development server
+npm start
+
+# Or use specific platforms
+npm run ios      # iOS simulator
+npm run android  # Android emulator
+npm run web      # Web browser
+```
+
+### 4. Development Workflow
+
+```bash
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+
+# Testing
+npm run test
+npm run test:watch
+
+# Clear cache and restart
+npm run clean
+```
+
+## 🏗️ Architecture Guidelines
+
+### File Naming Conventions
+
+- **Routes**: `app/**/*.tsx` (Expo Router conventions)
+- **Components**: `PascalCase.tsx` in `components/`
+- **Hooks**: `use*.ts` in `hooks/`
+- **UI Components**: `components/ui/PascalCase.tsx`
+
+### Component Structure
+
+```typescript
+// components/ui/Example.tsx
+import React, { memo } from 'react'
+import { View, Text } from 'react-native'
+
+interface ExampleProps {
+  title: string
+  testID?: string
+}
+
+const Example = memo<ExampleProps>(({ title, testID }) => {
+  return (
+    <View testID={testID}>
+      <Text>{title}</Text>
+    </View>
+  )
+})
+
+Example.displayName = 'Example'
+
+export { Example }
+export type { ExampleProps }
+```
+
+### Hook Structure
+
+```typescript
+// hooks/useExample.ts
+import { useState, useEffect } from 'react'
+
+interface UseExampleReturn {
+  data: unknown
+  loading: boolean
+  error: string | null
+}
+
+export const useExample = (): UseExampleReturn => {
+  // Implementation
+}
+```
+
+### API Integration
+
+```typescript
+// Using React Query hooks
+import { usePosts, useCreatePost } from '@/hooks/useApi'
+
+const MyComponent = () => {
+  const { data: posts, isLoading, error } = usePosts()
+  const createPost = useCreatePost()
+
+  const handleCreate = () => {
+    createPost.mutate({ title: 'New Post' })
+  }
+}
+```
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
+### Writing Tests
+
+```typescript
+// components/ui/__tests__/Example.test.tsx
+import React from 'react'
+import { render, fireEvent } from '@testing-library/react-native'
+import { Example } from '../Example'
+
+describe('Example', () => {
+  it('renders correctly', () => {
+    const { getByText } = render(<Example title="Test" />)
+    expect(getByText('Test')).toBeTruthy()
+  })
+})
+```
+
+## 📱 Performance Best Practices
+
+### Lists
+
+- Use `FlatList` for long lists
+- Implement `keyExtractor` and `getItemLayout`
+- Memoize list items with `React.memo`
+
+### Images
+
+- Use `expo-image` for optimized image loading
+- Implement lazy loading for large lists
+
+### Re-renders
+
+- Use `React.memo` for expensive components
+- Implement `useCallback` and `useMemo` strategically
+- Avoid inline objects/functions in render
+
+## 🔧 Available Scripts
+
+| Script       | Description                     |
+| ------------ | ------------------------------- |
+| `start`      | Start Expo development server   |
+| `android`    | Start Android development build |
+| `ios`        | Start iOS development build     |
+| `web`        | Start web development build     |
+| `lint`       | Run ESLint                      |
+| `typecheck`  | Run TypeScript type checking    |
+| `test`       | Run Jest tests                  |
+| `test:watch` | Run tests in watch mode         |
+| `clean`      | Clear cache and restart         |
+
+## 🚀 Deployment
+
+### Building for Production
+
+```bash
+# Build for iOS
+eas build --platform ios
+
+# Build for Android
+eas build --platform android
+
+# Build for both platforms
+eas build --platform all
+```
+
+### Publishing Updates
+
+```bash
+# Publish to Expo
+eas update --branch production
+```
+
+## 📚 Additional Resources
+
+- [Expo Documentation](https://docs.expo.dev/)
+- [Expo Router Documentation](https://docs.expo.dev/router/introduction/)
+- [React Query Documentation](https://tanstack.com/query/latest)
+- [Zustand Documentation](https://github.com/pmndrs/zustand)
+- [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
+
+## 🤝 Contributing
+
+1. Follow the established architecture patterns
+2. Write tests for new components and hooks
+3. Ensure TypeScript strict mode compliance
+4. Follow the naming conventions
+5. Add proper error handling
+
+## 📄 License
+
+This project is licensed under the MIT License.

@@ -1,0 +1,23 @@
+---
+title: React Native — APIs, Permissions & Offline (Expo)
+description: Safe patterns for platform APIs, permissions, secrets, and offline-first in Expo apps.
+globs: ["**/*"]
+priority: 60
+---
+
+## Permissions
+- Request lazily at point-of-use with clear rationale messaging.
+- Provide graceful fallbacks on denial; never crash routes that require permissions.
+- For camera/media/location/notifications, use the corresponding Expo modules and check permission state **before** calling feature APIs.
+
+## Device features (wrap behind services)
+- Create typed service wrappers in `lib/` (e.g., `lib/camera.ts`, `lib/location.ts`) that abstract Expo modules. This keeps routes/components clean and testable.
+- Guard with `Platform.OS` and capability checks.
+
+## Offline
+- Persist critical data (e.g., auth token, small caches). Consider `expo-secure-store` for secrets and `AsyncStorage` for general persistence.
+- Design optimistic updates with rollback.
+
+## Errors & telemetry
+- Centralize error boundaries; sanitize and redact PII/secrets in logs.
+- Consider lightweight analytics/errors with an opt-in provider mounted in `_layout.tsx`.

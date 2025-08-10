@@ -1,0 +1,52 @@
+---
+title: React Native — Core Standards (Expo Router)
+description: Rules tailored to an Expo project using Expo Router, /app routes, and TypeScript.
+globs:
+  - "app/**/*.tsx"
+  - "components/**/*.tsx"
+  - "components/**/*.ts"
+  - "hooks/**/*.ts"
+  - "constants/**/*.ts"
+  - "*.ts"
+  - "*.tsx"
+models: ["any"]
+priority: 100
+---
+
+## What you are
+- You are an expert in React Native, Expo, Expo Router, and TypeScript.
+- Prefer functional components and Hooks; avoid class components.
+- Generate **strict** TypeScript. Avoid `any`; if unavoidable, justify inline and narrow asap.
+
+## Project conventions
+- Directory layout (observed): `app/` (routes), `components/` (shared UI; includes `ui/`), `hooks/`, `constants/`, `assets/` (`fonts`, `images`), `scripts/`.
+- File naming:
+  - Route screens live under `app/**` using Expo Router conventions (`index.tsx`, `(tabs)/`, `_layout.tsx`, `+not-found.tsx`, etc.).
+  - Components in `components/` use `PascalCase.tsx`. Hooks use `use*.ts` in `hooks/`.
+- Exports:
+  - Prefer **named exports** for components/hooks; default export only for route files under `app/**` when it matches Expo Router expectations.
+- Styling:
+  - Choose one approach per file (`StyleSheet.create`, `styled-components`, or `nativewind`). Do not mix in the same file.
+  - Use `SafeAreaView` from `react-native-safe-area-context` (or `expo-router` Layouts) where appropriate.
+
+## Routing
+- Use **Expo Router** primitives (`Stack`, `Tabs`, `Drawer`, `Link`, `useRouter`, `useLocalSearchParams`) and keep params **typed**.
+- Keep layout files (`_layout.tsx`) small and focused; move heavy logic to hooks/components.
+
+## Data/state
+- Server state: prefer **React Query**.
+- Client state: prefer **Zustand** or lightweight Context for small, local needs.
+- Co-locate feature hooks/components with the route when it simplifies usage; otherwise place in `components/` or `hooks/`.
+
+## Network & errors
+- Centralize HTTP in `lib/api.ts` (or `lib/` folder if added) with typed inputs/outputs (Zod or TS types).
+- Surfaces must handle **loading / empty / error** states; never swallow errors.
+
+## Performance mindset
+- Memoize list rows and heavy subtrees (`React.memo`, `useCallback`, `useMemo`).
+- Avoid creating inline objects/functions inside `renderItem` of `FlatList/SectionList`.
+- Prefer `FlatList` for long lists, with `keyExtractor` and `getItemLayout` where feasible.
+
+## Code hygiene
+- Keep components ≤150 LOC; extract UI subcomponents and hooks.
+- Run `tsc --noEmit` and lint before large diffs; ensure the app boots on iOS & Android (Expo).

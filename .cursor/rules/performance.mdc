@@ -1,0 +1,29 @@
+---
+title: React Native — Performance
+description: Optimize lists, images, re-renders, and startup in an Expo Router app.
+globs:
+  - "app/**/*.tsx"
+  - "components/**/*.tsx"
+priority: 80
+---
+
+## Rendering
+- Use `FlatList/SectionList` for collections. Provide `keyExtractor` and stable `renderItem` (no inline creations).
+- Memoize row components; avoid prop churn. Prefer derived values via `useMemo`.
+- Defer heavy work to effects and idle moments when possible.
+
+## Images & assets
+- Pre-size and constrain images to avoid layout jumps.
+- Cache remote images where appropriate; avoid unnecessary re-fetching.
+
+## Startup & bundles
+- Lazy-load heavy feature routes using dynamic imports.
+- Keep `_layout.tsx` light; defer optional providers and large modules until needed.
+
+## Gestures & animations
+- Prefer `react-native-gesture-handler` and `react-native-reanimated` for smooth interactions.
+- Move heavy animations off JS thread when possible.
+
+## Diagnostics
+- Optional dev-only: `why-did-you-render` to detect re-render issues.
+- Add a PR checklist for lists, renders, and memory usage.

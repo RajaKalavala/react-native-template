@@ -1,0 +1,41 @@
+---
+title: React Native — Architecture & File Scaffolds (Expo Router)
+description: Structure and scaffolds aligned with an Expo Router app using /app, components/ui, hooks, constants.
+globs: ["**/*"]
+priority: 90
+---
+
+## Folders (current & recommended)
+- `app/`: route segments (e.g., `(tabs)/`, `_layout.tsx`, `index.tsx`, `+not-found.tsx`, feature routes).
+- `components/`: shared UI. Keep primitive/reusable UI in `components/ui/` and composite components at `components/` root or per-feature subfolders.
+- `hooks/`: cross-cutting hooks (naming `use*.ts`).
+- `constants/`: app-wide constants (colors, config). Keep `Colors.ts` here.
+- `assets/`: `fonts/`, `images/` (managed via `expo-asset` when needed).
+- `scripts/`: node scripts (e.g., `reset-project.js`).
+- `expo-env.d.ts`: type environment variables from `app.json` / `app.config.*` if present.
+
+## Expo Router patterns
+- Group related tabs under `app/(tabs)/`; use a `Tabs` layout inside `app/(tabs)/_layout.tsx`.
+- Avoid deep prop drilling across routes—compose with hooks and context providers at `_layout.tsx` boundaries.
+- For shared headers/wrappers, create a layout component and import it in route files.
+
+## File templates
+**Route Screen**
+- Path: `app/<segment>/index.tsx` (or `<name>.tsx`).
+- Include: typed search params via `useLocalSearchParams`, safe area, loading/error UI where applicable, and accessible controls (`accessibilityRole`, labels).
+
+**UI Component**
+- Path: `components/ui/{{Name}}.tsx`
+- Include: typed `Props`, `memo`, and `testID` for key targets. Export via named export.
+
+**Hook**
+- Path: `hooks/use{{Name}}.ts`
+- Include: input/output types; document side-effects.
+
+## Data flow
+- Place HTTP clients and adapters in `lib/` (create if missing). Keep feature-specific fetchers close to their route or in `lib/feature/` folders.
+- Use React Query keys in a `queryKeys.ts` per feature or under `lib/queryKeys.ts`.
+
+## DX
+- npm scripts to include: `android`, `ios`, `start`, `typecheck`, `lint`, `test`, `clean`.
+- Keep `tsconfig.json` strict; add path aliases when needed (e.g., `@/components`, `@/hooks`). Document any aliases in this rule.
